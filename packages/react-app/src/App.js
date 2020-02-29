@@ -5,16 +5,16 @@ import { ethers } from "ethers";
 import "./App.css";
 import ValidatorInfo from './ValidatorInfo'
 
+
 async function queryBeaconNode() {
   const url = "http://163.172.177.34:8080";
   const path = "/beacon/head";
   const response = await (await fetch(url + path)).json();
-
+  console.log(response)
   // then make another request?
   return response;
+
 }
-
-
 
 function handleDepositEvent(pubkey, withdrawl_creds, amount, signature, index) {
   console.log("Pubkey", pubkey);
@@ -26,6 +26,8 @@ function App() {
 
   const [validatorId, setValidatorId] = useState('foo');
   const [stateRoot, setStateRoot] = useState('');
+
+  // use effects or....?
 
   const goerliProvider = ethers.getDefaultProvider("goerli");
   const valRegistration = new ethers.Contract(
@@ -43,8 +45,8 @@ function App() {
 
       {/*{validatorId} is ready to validate*/}
       <ValidatorInfo
-        stateRoot='0xea81f5735fc0d76aea8e2c0dd9a6da7b7b1aa69fe26f152bce1938aa81dbb0f8'
-        pubKey='0x949d64d2942c9c084d8614c7037cbe54e9583137bfdd025b47ffc186714e6196dcf597cbae4a5a5a312f7a58d208b854'>
+        stateRoot='0xd25574d178e423c44b0beefa087c1428a51fe2fce245a1c1cb6fa9bff40beeab'
+        pubKey='0x8d113df94d1833dbc22eb4ffc3494431f11ffe88c0aba18da325a30bccaf663b0cfcc58fb034fa8a8fc9326f6e77e61a'>
       </ValidatorInfo>
     </div>
 
