@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { addresses, abis } from "@project/contracts";
 import { ethers } from "ethers";
+import { Card, CardText, CardBody } from "reactstrap";
 //import { bigNumberify } from "ethers/utils";
 import "./App.css";
 
-async function queryBeaconNode() {
-  const url = "http://163.172.177.34:8080";
-  const path = "/beacon/heads";
-  var response = await (await fetch(url + path)).json();
-  console.log(response);
+async function queryBeaconNode(setCount, path) {
+  const url = "http://163.172.177.34:8080" + path;
+  var response = await (await fetch(url)).json();
+  setCount(response);
 }
 
 function handleDepositEvent(pubkey, withdrawl_creds, amount, signature, index) {
@@ -23,11 +23,20 @@ function App() {
     goerliProvider
   );
   valRegistration.on("DepositEvent", handleDepositEvent);
+  const [result, setResult] = useState("hi");
   return (
     <div className="App">
-      <button onClick={() => queryBeaconNode()} style={{ background: "red" }}>
+      <button
+        onClick={() => queryBeaconNode(setResult, "/beacon/validators")}
+        style={{ background: "red" }}
+      >
         queryBeaconNode
       </button>
+      <Card>
+        <CardBody>
+          <CardText>{result}</CardText>
+        </CardBody>
+      </Card>
     </div>
   );
 }
