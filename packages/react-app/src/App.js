@@ -45,7 +45,7 @@ function App() {
 
       {/*{validatorId} is ready to validate*/}
       <ValidatorInfo
-        stateRoot='0xd45574d178e423c44b0beefa087c1428a51fe2fce245a1c1cb6fa9bff40beeab'
+        stateRoot='0x8f9d2c305fcb1b1dd0d17de4e80598cdd38c14029aadbbc921307ff04753a6c6'
         pubKey='0x8d113df94d1833dbc22eb4ffc3494431f11ffe88c0aba18da325a30bccaf663b0cfcc58fb034fa8a8fc9326f6e77e61a'>
       </ValidatorInfo>
     </div>

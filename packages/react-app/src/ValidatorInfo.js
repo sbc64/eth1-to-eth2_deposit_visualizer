@@ -15,6 +15,7 @@ const [activationEligibilityEpoch, setActivationEligibilityEpoch] = useState('un
 const [activationEpoch, setActivationEpoch] = useState('unknown');
 
 const fetchValidatorByPubKey = async (pubKey, stateRoot) => {
+
     let response;
 
     const url = 'http://163.172.177.34:8080/beacon/validators'
@@ -38,6 +39,7 @@ const postData = async (url = '', data = {}) => {
 
    try {
        validatorInfo = await response.json();
+       console.log(validatorInfo)
        setActivationEligibilityEpoch(validatorInfo[0].validator.activation_eligibility_epoch)
        setActivationEpoch(validatorInfo[0].validator.activation_epoch)
    }
