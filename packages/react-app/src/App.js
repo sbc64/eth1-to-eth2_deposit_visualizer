@@ -5,10 +5,10 @@ import { Card, CardText, CardBody } from "reactstrap";
 //import { bigNumberify } from "ethers/utils";
 import "./App.css";
 
-async function queryBeaconNode(setCount, path) {
+async function queryBeaconNode(setResult, path) {
   const url = "http://163.172.177.34:8080" + path;
   var response = await (await fetch(url)).json();
-  setCount(response);
+  setResult(JSON.stringify(response));
 }
 
 function handleDepositEvent(pubkey, withdrawl_creds, amount, signature, index) {
@@ -23,20 +23,17 @@ function App() {
     goerliProvider
   );
   valRegistration.on("DepositEvent", handleDepositEvent);
-  const [result, setResult] = useState("hi");
+  const [result, setResult] = useState("No queries yet...");
   return (
     <div className="App">
       <button
-        onClick={() => queryBeaconNode(setResult, "/beacon/validators")}
+        onClick={() => queryBeaconNode(setResult, "/beacon/validators/all")}
         style={{ background: "red" }}
       >
         queryBeaconNode
       </button>
-      <Card>
-        <CardBody>
-          <CardText>{result}</CardText>
-        </CardBody>
-      </Card>
+      <h4>Query results</h4>
+      <p>{result}</p>
     </div>
   );
 }
