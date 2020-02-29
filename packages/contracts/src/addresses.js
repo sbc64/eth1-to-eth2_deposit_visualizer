@@ -2,6 +2,7 @@
 // Goerli, Kovan, Rinkeby and Ropsten. Replace it with your smart contracts.
 const addresses = {
   ceaErc20: "0xc1C0472c0C80bCcDC7F5D01A376Bd97a734B8815",
+  despositContractPrysm: "0x4689a3C63CE249355C8a573B5974db21D2d1b8Ef"
 };
 
 export default addresses;
