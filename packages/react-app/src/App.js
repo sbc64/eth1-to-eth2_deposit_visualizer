@@ -1,31 +1,47 @@
-import React from 'react';
-import logo from './ethereumLogo.png';
-import { addresses, abis } from '@project/contracts';
-import { gql } from 'apollo-boost';
-import { ethers } from 'ethers';
-import { useQuery } from '@apollo/react-hooks';
-import './App.css';
+import React from "react";
+import logo from "./ethereumLogo.png";
+import { addresses, abis } from "@project/contracts";
+import { gql } from "apollo-boost";
+import { ethers } from "ethers";
+import { bigNumberify } from "ethers/utils";
+import { useQuery } from "@apollo/react-hooks";
+import "./App.css";
 
 const GET_TRANSFERS = gql`
-{
-  transfers (first: 10) {
-    id
-    from
-    to
-    value
+  {
+    transfers(first: 10) {
+      id
+      from
+      to
+      value
+    }
   }
-}
 `;
 
 async function readOnchainBalance() {
-  // Should replace with the end-user wallet, e.g. Metamask
+  const goerliProvider = ethers.getDefaultProvider("goerli");
   const defaultProvider = ethers.getDefaultProvider();
-  // Create an instance of ethers.Contract
-  // Read more about ethers.js on https://docs.ethers.io/ethers.js/html/api-contract.html
-  const ceaErc20 = new ethers.Contract(addresses.ceaErc20, abis.erc20, defaultProvider);
-  // A pre-defined address that owns some CEAERC20 tokens
-  const tokenBalance = await ceaErc20.balanceOf('0x3f8CB69d9c0ED01923F11c829BaE4D9a4CB6c82C');
-  console.log({ tokenBalance: tokenBalance.toString() });
+  const ceaErc20 = new ethers.Contract(
+    addresses.ceaErc20,
+    abis.erc20,
+    defaultProvider
+  );
+  console.log(ceaErc20);
+  const tokenBalance = await ceaErc20.balanceOf(
+    "0x3f8CB69d9c0ED01923F11c829BaE4D9a4CB6c82C"
+  );
+  //console.log({ tokenBalance: tokenBalance.toString() });
+
+  const valRegistration = new ethers.Contract(
+    addresses.despositContractPrysm,
+    abis.validatorRegistration,
+    goerliProvider
+  );
+  var data = bigNumberify(await valRegistration.get_deposit_count());
+  console.log(data.toString());
+  valRegistration.on("DepositEvent", input => {
+    console.log("HI event", input);
+  });
 }
 
 function App() {
@@ -33,7 +49,7 @@ function App() {
 
   React.useEffect(() => {
     if (!loading && !error && data && data.transfers) {
-      console.log({ transfers: data.transfers });
+      readOnchainBalance();
     }
   }, [loading, error, data]);
 
@@ -44,7 +60,10 @@ function App() {
         <p>
           Edit <code>packages/react-app/src/App.js</code> and save to reload.
         </p>
-        <button onClick={() => readOnchainBalance()} style={{ display: "none" }}>
+        <button
+          onClick={() => readOnchainBalance()}
+          style={{ display: "none" }}
+        >
           Read On-Chain Balance
         </button>
         <a
