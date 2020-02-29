@@ -15,12 +15,9 @@ async function queryAllValidators(setFunction) {
   setFunction(JSON.stringify(result));
 }
 
-function handleDepositEvent(pubkey, withdrawl_creds, amount, signature, index) {
-  console.log("Pubkey", pubkey);
-}
-
 function App() {
   const [resultAllValidators, setAllvalidators] = useState("No queries yet...");
+  const [depositEvent, setDepositEvent] = useState("No deposits yet...");
 
   const goerliProvider = ethers.getDefaultProvider("goerli");
   const valRegistration = new ethers.Contract(
@@ -28,7 +25,23 @@ function App() {
     abis.validatorRegistration,
     goerliProvider
   );
+  function handleDepositEvent(
+    pubkey,
+    withdrawl_creds,
+    amount,
+    signature,
+    index
+  ) {
+    let value = "pubkey: " + pubkey + "\n";
+    value = value + "withdrawl_credds: " + withdrawl_creds + "\n";
+    value = value + "amount: " + amount + "\n";
+    value = value + "siganature: " + signature + "\n";
+    value = value + "index: " + index + "\n";
+    setDepositEvent(value);
+  }
+
   valRegistration.on("DepositEvent", handleDepositEvent);
+
   return (
     <div className="App">
       <div>
@@ -44,14 +57,8 @@ function App() {
         </p>
       </div>
       <div>
-        <button
-          onClick={() => queryAllValidators(setAllvalidators)}
-          style={{ background: "red" }}
-        >
-          queryAllValidators
-        </button>
-        <h4>Query results</h4>
-        <p>{}</p>
+        <h4>Deposit Events</h4>
+        <p>{depositEvent}</p>
       </div>
     </div>
   );
